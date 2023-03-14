@@ -4,7 +4,7 @@ const fetch = require('node-fetch');
 const cors = require('kcors');
 const serve = require("koa-static");
 const mount = require("koa-mount");
-
+const debug = require('debug')('weathermap');
 
 const appId = process.env.APPID || '';
 const mapURI = process.env.MAP_ENDPOINT || 'http://api.openweathermap.org/data/2.5';
@@ -27,16 +27,16 @@ app.use(mount("/", static_pages));
 
 const fetchWeather = async () => {
   const endpoint = `${mapURI}/weather?q=${targetCity}&appid=${appId}&`;
+  debug(`Calling ${endpoint}`)
   const response = await fetch(endpoint);
-
   return response ? response.json() : {};
 };
 
 router.get('/api/weather', async ctx => {
   const weatherData = await fetchWeather();
-
   ctx.type = 'application/json; charset=utf-8';
   ctx.body = weatherData.weather ? weatherData.weather[0] : {};
+  debug(ctx.body);
 });
 
 app.use(router.routes());
@@ -45,3 +45,4 @@ app.use(router.allowedMethods());
 app.listen(port);
 
 console.log(`App listening on port ${port}`);
+debug('Running in Debug mode');
