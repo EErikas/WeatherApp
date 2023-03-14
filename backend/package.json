@@ -6,7 +6,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "DEBUG=weathermap ./node_modules/.bin/nodemon src/index.js",
+    "dev": "nodemon -L src/index.js",
     "lint": "eslint src/*.js"
   },
   "dependencies": {
@@ -14,7 +14,9 @@
     "kcors": "^2.2.2",
     "koa": "^2.13.0",
     "koa-json": "^2.0.2",
+    "koa-mount": "^4.0.0",
     "koa-router": "^9.4.0",
+    "koa-static": "^5.0.0",
     "node-fetch": "^2.6.0"
   },
   "devDependencies": {
@@ -25,6 +27,6 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.2"
   }
 }
