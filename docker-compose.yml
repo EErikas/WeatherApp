@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  backend:
+    build:
+      context: ./backend/
+    volumes:
+      - ./backend:/app
+      - /app/node_modules/
+    ports:
+      - 9000:9000
+    env_file:
+      - .env
+
+  frontend:
+    depends_on:
+      - backend
+    build: ./frontend/
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules/
+    ports:
+      - 8000:8000

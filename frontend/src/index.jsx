@@ -6,8 +6,7 @@ const baseURL = ((import.meta.env.PROD) ? '/api' : 'http://localhost:9000/api');
 const getWeatherFromApi = async () => {
   try {
     const response = await fetch(`${baseURL}/weather`);
-    console.log('opce');
-    console.log(baseURL);
+    console.log(`Backend at ${baseURL}`);
     return response.json();
   } catch (error) {
     console.error(error);
