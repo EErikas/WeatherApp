@@ -9,7 +9,7 @@ FROM node:lts-alpine
 WORKDIR /app
 COPY ./backend/package*.json  ./
 # Only install production packages
-RUN npm ci --production
+RUN npm ci --omit=dev
 COPY ./backend/ .
 COPY --from=frontend_builder /app/dist ./dist
 CMD [ "npm", "start" ] 
