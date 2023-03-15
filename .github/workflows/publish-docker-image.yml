@@ -6,7 +6,35 @@ on:
       - "main"
 
 jobs:
-  docker:
+  lint-frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18.15.0
+      - run: npm ci
+      - run: npm run lint
+      
+  lint-backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18.15.0
+      - run: npm ci
+      - run: npm run lint
+      
+  publish-docker-container:
+    name: Build and Publish Docker Container
+    needs: [lint-frontend, lint-backend]
     runs-on: ubuntu-latest
     steps:
       -
