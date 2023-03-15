@@ -9,7 +9,6 @@ const debug = require('debug')('weathermap');
 
 const appId = process.env.APPID || '';
 const mapURI = process.env.MAP_ENDPOINT || 'http://api.openweathermap.org/data/2.5';
-const targetCity = process.env.TARGET_CITY || 'Helsinki,fi';
 
 const port = process.env.PORT || 9000;
 
@@ -45,20 +44,20 @@ const fetchForecasttWeather = async (lat, lon) => {
 router.get('/api/weather/:lat/:lon', async ctx => {
   const currentWeatherData = await fetchCurrentWeather(ctx.params.lat, ctx.params.lon);
   const forecastWeatherData = await fetchForecasttWeather(ctx.params.lat, ctx.params.lon);
-  
+
   ctx.type = 'application/json; charset=utf-8';
   ctx.body = {};
 
-  if (currentWeatherData && forecastWeatherData){
+  if (currentWeatherData && forecastWeatherData) {
     ctx.body = {
       city: currentWeatherData.name,
       country: currentWeatherData.sys.country,
-      today:{
-        ...currentWeatherData.weather[0]
+      today: {
+        ...currentWeatherData.weather[0],
       },
-      tomorrow:{
-        ...forecastWeatherData.list[7].weather[0]
-      }
+      tomorrow: {
+        ...forecastWeatherData.list[7].weather[0],
+      },
     };
   }
 
