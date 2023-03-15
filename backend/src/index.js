@@ -27,17 +27,41 @@ const staticPagesPath = path.join(__dirname, '../dist');
 staticPages.use(serve(staticPagesPath));
 app.use(mount('/', staticPages));
 
-const fetchWeather = async () => {
-  const endpoint = `${mapURI}/weather?q=${targetCity}&appid=${appId}&`;
+// get current weather
+const fetchCurrentWeather = async (lat, lon) => {
+  const endpoint = `${mapURI}/weather?lat=${lat}&lon=${lon}&appid=${appId}&`;
+  debug(`Calling ${endpoint}`);
+  const response = await fetch(endpoint);
+  return response ? response.json() : {};
+};
+// get 5 day / 3 hour forecast
+const fetchForecasttWeather = async (lat, lon) => {
+  const endpoint = `${mapURI}/forecast?lat=${lat}&lon=${lon}&appid=${appId}&`;
   debug(`Calling ${endpoint}`);
   const response = await fetch(endpoint);
   return response ? response.json() : {};
 };
 
-router.get('/api/weather', async ctx => {
-  const weatherData = await fetchWeather();
+router.get('/api/weather/:lat/:lon', async ctx => {
+  const currentWeatherData = await fetchCurrentWeather(ctx.params.lat, ctx.params.lon);
+  const forecastWeatherData = await fetchForecasttWeather(ctx.params.lat, ctx.params.lon);
+  
   ctx.type = 'application/json; charset=utf-8';
-  ctx.body = weatherData.weather ? weatherData.weather[0] : {};
+  ctx.body = {};
+
+  if (currentWeatherData && forecastWeatherData){
+    ctx.body = {
+      city: currentWeatherData.name,
+      country: currentWeatherData.sys.country,
+      today:{
+        ...currentWeatherData.weather[0]
+      },
+      tomorrow:{
+        ...forecastWeatherData.list[7].weather[0]
+      }
+    };
+  }
+
   debug(ctx.body);
 });
 
