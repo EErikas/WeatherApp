@@ -94,5 +94,5 @@ jobs:
       run: docker push $IMAGE_NAME
 
     - name: Deploy Docker image
-      run: gcloud run deploy ${{ secrets.GCP_PROJECT_ID }} --image $IMAGE_NAME --region europe-north1 --set-env-vars=[APPID=${{ secrets.APPID }}] --max-instances=15 --platform=managed --allow-unauthenticated 
+      run: gcloud run deploy ${{ secrets.GCP_PROJECT_ID }} --image $IMAGE_NAME --region europe-north1 --set-env-vars=APPID=${{ secrets.APPID }} --max-instances=15 --platform=managed --allow-unauthenticated 
       
