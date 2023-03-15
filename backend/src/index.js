@@ -2,8 +2,9 @@ const Koa = require('koa');
 const router = require('koa-router')();
 const fetch = require('node-fetch');
 const cors = require('kcors');
-const serve = require("koa-static");
-const mount = require("koa-mount");
+const serve = require('koa-static');
+const mount = require('koa-mount');
+const path = require('node:path');
 const debug = require('debug')('weathermap');
 
 const appId = process.env.APPID || '';
@@ -18,16 +19,17 @@ app.use(cors());
 
 // Print Error if API Key is missing
 if (appId === '') {
-  console.error('API Key is Missing!')
+  console.error('API Key is Missing!');
 }
 // serve compiled frontend files
-const static_pages = new Koa();
-static_pages.use(serve(__dirname + '/../dist'));
-app.use(mount("/", static_pages));
+const staticPages = new Koa();
+const staticPagesPath = path.join(__dirname, '../dist');
+staticPages.use(serve(staticPagesPath));
+app.use(mount('/', staticPages));
 
 const fetchWeather = async () => {
   const endpoint = `${mapURI}/weather?q=${targetCity}&appid=${appId}&`;
-  debug(`Calling ${endpoint}`)
+  debug(`Calling ${endpoint}`);
   const response = await fetch(endpoint);
   return response ? response.json() : {};
 };
