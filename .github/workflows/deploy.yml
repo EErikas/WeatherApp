@@ -65,7 +65,8 @@ jobs:
           tags: |
             ghcr.io/eerikas/weather-app:latest
             ghcr.io/eerikas/weather-app:0.${{ github.run_number }}
-    
+  # Based on:
+  # https://cloud.google.com/community/tutorials/cicd-cloud-run-github-actions
   deploy:
     name: Deploy to Google Cloud Run
     needs: [lint-frontend, lint-backend]
