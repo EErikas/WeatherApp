@@ -1,0 +1,39 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+  - name: Update system
+    apt:
+      update_cache: yes
+      upgrade: yes
+
+  - name: Install required packages
+    apt:
+      name: ['git', 'apt-transport-https', 'ca-certificates', 'curl', 'gnupg', 'lsb-release']
+      state: latest
+
+  - name: Add Docker GPG key
+    apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      state: present
+
+  - name: Add Docker repository
+    apt_repository:
+      repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable
+      state: present
+
+  - name: Install Docker and Docker Compose
+    apt:
+      name: ['docker-ce', 'docker-ce-cli', 'containerd.io', 'docker-compose']
+      state: latest
+
+
+  - name: Start Docker service
+    service:
+      name: docker
+      state: started
+
+  - name: Clone repository from GitHub
+    git:
+      repo: https://github.com/EErikas/WeatherApp
+      dest: /home/{{ ansible_user }}/WeatherApp

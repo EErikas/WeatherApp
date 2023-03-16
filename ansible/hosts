@@ -1,0 +1,2 @@
+[dev-machines]
+dev-machine-1 ansible_host=<host-ip-address> ansible_user=<user-name> ansible_connection=ssh 
